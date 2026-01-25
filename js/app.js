@@ -33,7 +33,7 @@ createApp({
             :class="{ active: currentTab === 'search' }"
             @click="currentTab = 'search'"
           >
-            �ꗗ����
+            一覧検索
           </button>
         </li>
         <li class="nav-item">
@@ -42,7 +42,7 @@ createApp({
             :class="{ active: currentTab === 'show' }"
             @click="currentTab = 'show'"
           >
-            ���ڕ\��
+            項目表示
           </button>
         </li>
         <li class="nav-item">
@@ -51,7 +51,7 @@ createApp({
             :class="{ active: currentTab === 'add' }"
             @click="currentTab = 'add'"
           >
-            �ǉ�
+            追加
           </button>
         </li>
       </ul>
