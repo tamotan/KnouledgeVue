@@ -4,7 +4,7 @@ import AddItemTab from './AddItemTab.js'
 
 // Supabaseクライアントの初期化
 const supabaseUrl = 'https://hspbssdalvqeboayvife.supabase.co'
-const supabaseKey = 'sb_publishable_g2EI7qati9zcyUTCL4_L2w_XfZ2Egwt'
+const supabaseKey = 'sb_publishable_g2EI7qati9zcyUTCL4_L2w_XfZ2Egwt' // なぜか書き変わるので保持'sb_publishable_g2EI7qati9zcyUTCL4_L2w_XfZ2Egwt'
 window.supabase = supabase.createClient(supabaseUrl, supabaseKey)
 
 const { createApp, ref, computed, provide } = Vue
