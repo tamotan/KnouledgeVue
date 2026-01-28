@@ -6,6 +6,7 @@ export default {
     const items = ref([])
     const loading = ref(true)
     const error = ref(null)
+    const selectedItemId = ref(null)
 
     const fetchItems = async () => {
       try {
@@ -26,6 +27,10 @@ export default {
       }
     }
 
+    const selectItem = (itemId) => {
+      selectedItemId.value = itemId
+    }
+
     onMounted(() => {
       fetchItems()
     })
@@ -33,7 +38,9 @@ export default {
     return {
       items,
       loading,
-      error
+      error,
+      selectedItemId,
+      selectItem
     }
   },
   template: `
@@ -48,11 +55,28 @@ export default {
         エラー: {{ error }}
       </div>
       
-      <select v-else class="form-select" size="10">
-        <option v-for="item in items" :key="item.item_id" :value="item.item_id">
-          {{ item.item_id }}: {{ item.title }}
-        </option>
-      </select>
+      <div v-else class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-bordered table-hover">
+          <thead class="table-light sticky-top">
+            <tr>
+              <th style="width: 100px; text-align: center;">ID</th>
+              <th>TITLE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr 
+              v-for="item in items" 
+              :key="item.item_id"
+              :class="{ 'table-active': selectedItemId === item.item_id }"
+              @click="selectItem(item.item_id)"
+              style="cursor: pointer;"
+            >
+              <td style="text-align: right;">{{ item.item_id }}</td>
+              <td>{{ item.title }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   `
 }
