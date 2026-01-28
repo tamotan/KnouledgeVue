@@ -40,12 +40,12 @@ export default {
     <div>
       <div v-if="loading" class="text-center py-3">
         <div class="spinner-border" role="status">
-          <span class="visually-hidden">“Ç‚İ‚İ’†...</span>
+          <span class="visually-hidden">èª­ã¿è¾¼ã¿ä¸­...</span>
         </div>
       </div>
       
       <div v-else-if="error" class="alert alert-danger">
-        ƒGƒ‰[: {{ error }}
+        ã‚¨ãƒ©ãƒ¼: {{ error }}
       </div>
       
       <select v-else class="form-select" size="10">
