@@ -1,4 +1,4 @@
-const { ref, onMounted } = Vue
+const { ref, onMounted, inject } = Vue
 
 export default {
   name: 'SearchTab',
@@ -7,6 +7,9 @@ export default {
     const loading = ref(true)
     const error = ref(null)
     const selectedItemId = ref(null)
+    
+    // app.jsから関数を取得
+    const switchToShowTab = inject('switchToShowTab')
 
     const fetchItems = async () => {
       try {
@@ -31,6 +34,10 @@ export default {
       selectedItemId.value = itemId
     }
 
+    const handleDoubleClick = (itemId) => {
+      switchToShowTab(itemId)
+    }
+
     onMounted(() => {
       fetchItems()
     })
@@ -40,7 +47,8 @@ export default {
       loading,
       error,
       selectedItemId,
-      selectItem
+      selectItem,
+      handleDoubleClick
     }
   },
   template: `
@@ -69,6 +77,7 @@ export default {
               :key="item.item_id"
               :class="{ 'table-active': selectedItemId === item.item_id }"
               @click="selectItem(item.item_id)"
+              @dblclick="handleDoubleClick(item.item_id)"
               style="cursor: pointer;"
             >
               <td style="text-align: right;">{{ item.item_id }}</td>
