@@ -1,6 +1,7 @@
 import SearchTab from './SearchTab.js'
 import ShowTab from './ShowTab.js'
 import AddItemTab from './AddItemTab.js'
+import TagManageTab from './TagManageTab.js'
 import SupabaseClient from './SupabaseClient.js'
 
 // Supabaseクライアントの初期化
@@ -19,7 +20,8 @@ createApp({
       return {
         search: SearchTab,
         show: ShowTab,
-        add: AddItemTab
+        add: AddItemTab,
+        tagmanage: TagManageTab
       }[currentTab.value]
     })
 
@@ -41,7 +43,7 @@ createApp({
 
   template: `
     <div>
-      <h3 class="mb-3">KNOWLEDGE 0.11</h3>
+      <h3 class="mb-3">KNOWLEDGE 0.12</h3>
 
       <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
@@ -69,6 +71,15 @@ createApp({
             @click="currentTab = 'add'"
           >
             追加
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            :class="{ active: currentTab === 'tagmanage' }"
+            @click="currentTab = 'tagmanage'"
+          >
+            タグ管理
           </button>
         </li>
       </ul>

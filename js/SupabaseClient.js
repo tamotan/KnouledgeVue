@@ -78,6 +78,45 @@ class SupabaseClient {
 
     if (error) throw error
   }
+
+  // タグを追加
+  async addTag(tagName) {
+    const { data, error } = await this.client
+      .from('tag')
+      .insert({
+        tag: tagName.trim()
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  // タグを更新
+  async updateTag(tagId, tagName) {
+    const { data, error } = await this.client
+      .from('tag')
+      .update({
+        tag: tagName.trim()
+      })
+      .eq('tag_id', tagId)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  // タグを削除
+  async deleteTag(tagId) {
+    const { error } = await this.client
+      .from('tag')
+      .delete()
+      .eq('tag_id', tagId)
+
+    if (error) throw error
+  }
 }
 
 export default SupabaseClient
