@@ -43,7 +43,7 @@ createApp({
 
   template: `
     <div>
-      <h3 class="mb-3">KNOWLEDGE 0.12</h3>
+      <h3 class="mb-3">KNOWLEDGE 1.01</h3>
 
       <ul class="nav nav-tabs mb-3">
         <li class="nav-item">

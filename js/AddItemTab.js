@@ -3,7 +3,8 @@ const { ref, onMounted } = Vue
 export default {
   name: 'AddItemTab',
   setup() {
-    const allTags = ref([])
+    const level1Tags = ref([])
+    const level2Tags = ref([])
     const selectedTags = ref(['', '', '', '', ''])
     const visibleTagCount = ref(1)
     const loading = ref(true)
@@ -12,13 +13,15 @@ export default {
     const text = ref('')
     const saving = ref(false)
 
-    const fetchTags = async () => {
+    // レベル別タグを取得
+    const fetchTagsByLevel = async () => {
       try {
         loading.value = true
-        allTags.value = await window.supabaseClient.getAllTags()
+        level1Tags.value = await window.supabaseClient.getTagsByLevel(1)
+        level2Tags.value = await window.supabaseClient.getTagsByLevel(2)
       } catch (err) {
         error.value = err.message
-        console.error('Error fetching tags:', err)
+        console.error('Error fetching tags by level:', err)
       } finally {
         loading.value = false
       }
@@ -85,11 +88,12 @@ export default {
     }
 
     onMounted(() => {
-      fetchTags()
+      fetchTagsByLevel()
     })
 
     return {
-      allTags,
+      level1Tags,
+      level2Tags,
       selectedTags,
       visibleTagCount,
       loading,
@@ -116,6 +120,7 @@ export default {
 
       <div v-else>
         <div class="mb-3">
+          <!-- タグ1: Level 1のタグのみ -->
           <select 
             v-model="selectedTags[0]"
             @change="onTagChange(0)"
@@ -124,7 +129,7 @@ export default {
           >
             <option value="">-- タグを選択 --</option>
             <option 
-              v-for="tag in allTags" 
+              v-for="tag in level1Tags" 
               :key="tag.tag_id" 
               :value="tag.tag_id"
             >
@@ -132,6 +137,7 @@ export default {
             </option>
           </select>
 
+          <!-- タグ2: Level 2のタグのみ -->
           <select 
             v-if="visibleTagCount >= 2"
             v-model="selectedTags[1]"
@@ -141,7 +147,7 @@ export default {
           >
             <option value="">なし</option>
             <option 
-              v-for="tag in allTags" 
+              v-for="tag in level2Tags" 
               :key="tag.tag_id" 
               :value="tag.tag_id"
             >
@@ -149,6 +155,7 @@ export default {
             </option>
           </select>
 
+          <!-- タグ3: Level 2のタグのみ -->
           <select 
             v-if="visibleTagCount >= 3"
             v-model="selectedTags[2]"
@@ -158,7 +165,7 @@ export default {
           >
             <option value="">なし</option>
             <option 
-              v-for="tag in allTags" 
+              v-for="tag in level2Tags" 
               :key="tag.tag_id" 
               :value="tag.tag_id"
             >
@@ -166,6 +173,7 @@ export default {
             </option>
           </select>
 
+          <!-- タグ4: Level 2のタグのみ -->
           <select 
             v-if="visibleTagCount >= 4"
             v-model="selectedTags[3]"
@@ -175,7 +183,7 @@ export default {
           >
             <option value="">なし</option>
             <option 
-              v-for="tag in allTags" 
+              v-for="tag in level2Tags" 
               :key="tag.tag_id" 
               :value="tag.tag_id"
             >
@@ -183,6 +191,7 @@ export default {
             </option>
           </select>
 
+          <!-- タグ5: Level 2のタグのみ -->
           <select 
             v-if="visibleTagCount >= 5"
             v-model="selectedTags[4]"
@@ -192,7 +201,7 @@ export default {
           >
             <option value="">なし</option>
             <option 
-              v-for="tag in allTags" 
+              v-for="tag in level2Tags" 
               :key="tag.tag_id" 
               :value="tag.tag_id"
             >

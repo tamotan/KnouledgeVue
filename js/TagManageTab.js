@@ -13,6 +13,7 @@ export default {
     const isEditMode = ref(false)
     const formTagId = ref('')
     const formTag = ref('')
+    const formLevel = ref(2)
 
     // タグ一覧を取得
     const fetchTags = async () => {
@@ -34,6 +35,7 @@ export default {
       isEditMode.value = true
       formTagId.value = tag.tag_id
       formTag.value = tag.tag
+      formLevel.value = tag.level || 2
     }
 
     // フォームをクリア
@@ -42,6 +44,7 @@ export default {
       selectedTagId.value = null
       formTagId.value = ''
       formTag.value = ''
+      formLevel.value = 2
       error.value = null
     }
 
@@ -56,7 +59,7 @@ export default {
         saving.value = true
         error.value = null
 
-        await window.supabaseClient.addTag(formTag.value)
+        await window.supabaseClient.addTag(formTag.value, formLevel.value)
         alert('タグが追加されました。')
         
         clearForm()
@@ -87,7 +90,7 @@ export default {
         saving.value = true
         error.value = null
 
-        await window.supabaseClient.updateTag(formTagId.value, formTag.value)
+        await window.supabaseClient.updateTag(formTagId.value, formTag.value, formLevel.value)
         alert('タグが更新されました。')
         
         clearForm()
@@ -145,6 +148,7 @@ export default {
       isEditMode,
       formTagId,
       formTag,
+      formLevel,
       selectTag,
       clearForm,
       handleAdd,
@@ -174,6 +178,7 @@ export default {
                 <tr>
                   <th style="width: 100px; text-align: center;">ID</th>
                   <th>タグ名</th>
+                  <th style="width: 100px; text-align: center;">Level</th>
                 </tr>
               </thead>
               <tbody>
@@ -186,6 +191,7 @@ export default {
                 >
                   <td style="text-align: right;">{{ tag.tag_id }}</td>
                   <td>{{ tag.tag }}</td>
+                  <td style="text-align: right;">{{ tag.level }}</td>
                 </tr>
               </tbody>
             </table>
@@ -218,6 +224,20 @@ export default {
                 :disabled="saving"
                 placeholder="タグ名を入力"
               >
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Level</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                v-model.number="formLevel"
+                :disabled="saving"
+                placeholder="レベル (数値)"
+                min="1"
+                max="2"
+              >
+              <div class="form-text">1 〜 2 の範囲で入力してください</div>
             </div>
 
             <div class="d-flex gap-2">
