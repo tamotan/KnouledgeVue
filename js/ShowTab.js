@@ -1,4 +1,4 @@
-const { ref, inject, watch, onMounted } = Vue
+const { ref, inject, watch } = Vue
 
 export default {
   name: 'ShowTab',
@@ -20,25 +20,8 @@ export default {
         loading.value = true
         error.value = null
 
-        // アイテムのデータを取得
-        const { data: itemData, error: itemError } = await window.supabase
-          .from('item')
-          .select('item_id, title, text')
-          .eq('item_id', itemId)
-          .single()
-
-        if (itemError) throw itemError
-        item.value = itemData
-
-        // タグのデータを取得（最大5個）
-        const { data: tagData, error: tagError } = await window.supabase
-          .from('taglink')
-          .select('tag:tag_id(tag_id, tag)')
-          .eq('item_id', itemId)
-          .limit(5)
-
-        if (tagError) throw tagError
-        tags.value = tagData?.map(t => t.tag) || []
+        item.value = await window.supabaseClient.getItem(itemId)
+        tags.value = await window.supabaseClient.getItemTags(itemId, 5)
 
       } catch (err) {
         error.value = err.message
@@ -48,7 +31,6 @@ export default {
       }
     }
 
-    // selectedItemIdが変更されたら自動的にデータを取得
     watch(selectedItemId, (newId) => {
       fetchItemData(newId)
     }, { immediate: true })

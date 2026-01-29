@@ -8,20 +8,12 @@ export default {
     const error = ref(null)
     const selectedItemId = ref(null)
     
-    // app.jsから関数を取得
     const switchToShowTab = inject('switchToShowTab')
 
     const fetchItems = async () => {
       try {
         loading.value = true
-        const { data, error: fetchError } = await window.supabase
-          .from('item')
-          .select('item_id, title')
-          .order('item_id', { ascending: true })
-
-        if (fetchError) throw fetchError
-
-        items.value = data || []
+        items.value = await window.supabaseClient.getItems()
       } catch (err) {
         error.value = err.message
         console.error('Error fetching items:', err)

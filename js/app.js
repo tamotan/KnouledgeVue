@@ -1,11 +1,12 @@
 import SearchTab from './SearchTab.js'
 import ShowTab from './ShowTab.js'
 import AddItemTab from './AddItemTab.js'
+import SupabaseClient from './SupabaseClient.js'
 
 // Supabaseクライアントの初期化
 const supabaseUrl = 'https://hspbssdalvqeboayvife.supabase.co'
-const supabaseKey = 'sb_publishable_g2EI7qati9zcyUTCL4_L2w_XfZ2Egwt' // なぜか書き変わるので保持'sb_publishable_g2EI7qati9zcyUTCL4_L2w_XfZ2Egwt'
-window.supabase = supabase.createClient(supabaseUrl, supabaseKey)
+const supabaseKey = 'sb_publishable_g2EI7qati9zcyUTCL4_L2w_XfZ2Egwt'
+window.supabaseClient = new SupabaseClient(supabaseUrl, supabaseKey)
 
 const { createApp, ref, computed, provide } = Vue
 
@@ -40,7 +41,7 @@ createApp({
 
   template: `
     <div>
-      <h3 class="mb-3">KNOWLEDGE</h3>
+      <h3 class="mb-3">KNOWLEDGE 0.11</h3>
 
       <ul class="nav nav-tabs mb-3">
         <li class="nav-item">

@@ -12,18 +12,10 @@ export default {
     const text = ref('')
     const saving = ref(false)
 
-    // データベースからタグ一覧を取得
     const fetchTags = async () => {
       try {
         loading.value = true
-        const { data, error: fetchError } = await window.supabase
-          .from('tag')
-          .select('tag_id, tag')
-          .order('tag_id', { ascending: true })
-
-        if (fetchError) throw fetchError
-
-        allTags.value = data || []
+        allTags.value = await window.supabaseClient.getAllTags()
       } catch (err) {
         error.value = err.message
         console.error('Error fetching tags:', err)
@@ -32,31 +24,23 @@ export default {
       }
     }
 
-    // タグが選択されたときの処理
     const onTagSelect = (index) => {
-      // 選択されたタグが有効で、次のタグがまだ表示されていない場合
       if (selectedTags.value[index] && visibleTagCount.value < 5 && index === visibleTagCount.value - 1) {
         visibleTagCount.value++
       }
     }
 
-    // タグが「なし」に変更されたときの処理
     const onTagChange = (index) => {
-      // 「なし」が選択された場合、それ以降のタグをリセット
       if (!selectedTags.value[index] && index < 4) {
-        // 後続のタグをクリア
         for (let i = index + 1; i < 5; i++) {
           selectedTags.value[i] = ''
         }
-        // 表示数を調整
         visibleTagCount.value = index + 1
       } else {
-        // タグが選択された場合、次のタグを表示
         onTagSelect(index)
       }
     }
 
-    // キャンセル処理
     const handleCancel = () => {
       title.value = ''
       text.value = ''
@@ -65,9 +49,7 @@ export default {
       error.value = null
     }
 
-    // 追加処理
     const handleAdd = async () => {
-      // バリデーション
       if (!title.value.trim()) {
         alert('タイトルを入力してください。')
         return
@@ -82,39 +64,15 @@ export default {
         saving.value = true
         error.value = null
 
-        // itemテーブルに追加
-        const { data: newItem, error: itemError } = await window.supabase
-          .from('item')
-          .insert({
-            title: title.value.trim(),
-            text: text.value.trim()
-          })
-          .select()
-          .single()
+        const newItem = await window.supabaseClient.addItem(title.value, text.value)
 
-        if (itemError) throw itemError
-
-        // 選択されたタグのみを抽出（空でないもの）
         const validTagIds = selectedTags.value.filter(tagId => tagId !== '')
 
-        // taglinkテーブルに追加
         if (validTagIds.length > 0) {
-          const tagLinks = validTagIds.map(tagId => ({
-            item_id: newItem.item_id,
-            tag_id: tagId
-          }))
-
-          const { error: taglinkError } = await window.supabase
-            .from('taglink')
-            .insert(tagLinks)
-
-          if (taglinkError) throw taglinkError
+          await window.supabaseClient.addTagLinks(newItem.item_id, validTagIds)
         }
 
-        // 成功メッセージ
         alert(`ID [${newItem.item_id}] タイトル [${newItem.title}] が追加されました`)
-
-        // フォームをクリア
         handleCancel()
 
       } catch (err) {
@@ -158,7 +116,6 @@ export default {
 
       <div v-else>
         <div class="mb-3">
-          <!-- タグ1 -->
           <select 
             v-model="selectedTags[0]"
             @change="onTagChange(0)"
@@ -175,7 +132,6 @@ export default {
             </option>
           </select>
 
-          <!-- タグ2 -->
           <select 
             v-if="visibleTagCount >= 2"
             v-model="selectedTags[1]"
@@ -193,7 +149,6 @@ export default {
             </option>
           </select>
 
-          <!-- タグ3 -->
           <select 
             v-if="visibleTagCount >= 3"
             v-model="selectedTags[2]"
@@ -211,7 +166,6 @@ export default {
             </option>
           </select>
 
-          <!-- タグ4 -->
           <select 
             v-if="visibleTagCount >= 4"
             v-model="selectedTags[3]"
@@ -229,7 +183,6 @@ export default {
             </option>
           </select>
 
-          <!-- タグ5 -->
           <select 
             v-if="visibleTagCount >= 5"
             v-model="selectedTags[4]"
