@@ -242,7 +242,7 @@ export default {
 
         <div class="mb-3">
           <label class="form-label">Text</label>
-          <textarea class="form-control" rows="6" :value="item.text" readonly></textarea>
+          <textarea class="form-control" rows="15" :value="item.text" readonly></textarea>
         </div>
 
         <div class="d-flex gap-2">
@@ -366,7 +366,7 @@ export default {
           <label class="form-label">Text</label>
           <textarea 
             class="form-control" 
-            rows="6" 
+            rows="13" 
             v-model="editText"
             :disabled="saving"
           ></textarea>
