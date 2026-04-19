@@ -113,7 +113,7 @@ export default {
         return
       }
 
-      if (!confirm(`[${editTitle.value}] を更新します。`)) {
+      if (!confirm(`[${editTitle.value}] の変更を保存します。`)) {
         return
       }
 
@@ -380,7 +380,7 @@ export default {
             :disabled="saving"
           >
             <span v-if="saving" class="spinner-border spinner-border-sm me-1"></span>
-            更新
+            保存
           </button>
           <button 
             type="button" 

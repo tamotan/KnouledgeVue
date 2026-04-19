@@ -55,7 +55,7 @@ export default {
         エラー: {{ error }}
       </div>
       
-      <div v-else class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+      <div v-else class="table-responsive" style="max-height: 500px; overflow-y: auto;">
         <table class="table table-bordered table-hover">
           <thead class="table-light sticky-top">
             <tr>
